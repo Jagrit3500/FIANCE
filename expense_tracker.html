@@ -1,126 +1,190 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="expense_tracker.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="top-nav">
+            <a href="javascript:void(0)" onclick="goHome()" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </nav>
+        <h1 id="title">Expense Tracker</h1>
+        
+        <div class="bento-grid">
+            
+            <div class="bento-box income-box">
+                <div class="box-header">
+                    <i class="fas fa-wallet"></i>
+                    <h3>Monthly Income</h3>
+                </div>
+                <div class="income-input">
+                    <input type="number" id="monthly-income" placeholder="Monthly Income (₹)" required>
+                    <button id="save-income" class="income-btn">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </div>
+                <div class="income-display">
+                    Current Income: <span id="income-amount">₹0</span>
+                </div>
+            </div>
 
-body {
-    min-height: 100vh;
-    background: linear-gradient(-45deg, #1a1a1a, #2d1f1f, #331c0c, #1f1209);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-    font-family: 'Poppins', sans-serif;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+            
+            <div class="bento-box expense-form-box">
+                <div class="box-header">
+                    <i class="fas fa-plus-circle"></i>
+                    <h3>Add Expense</h3>
+                </div>
+                <form id="expense-form">
+                    <div class="input-group">
+                        <input type="text" id="expense-name" placeholder="Expense Description" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="number" id="expense-amount" placeholder="Amount (₹)" required>
+                    </div>
+                    <div class="input-group">
+                        <select id="expense-category" required>
+                            <option value="">Select Category</option>
+                            <option value="Food">🍽️ Food</option>
+                            <option value="Transport">🚗 Transport</option>
+                            <option value="Entertainment">🎮 Entertainment</option>
+                            <option value="Shopping">🛍️ Shopping</option>
+                            <option value="Bills">📃 Bills</option>
+                            <option value="Other">📌 Other</option>
+                        </select>
+                    </div>
+                    <button type="submit">Add Expense</button>
+                </form>
+            </div>
 
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+            
+            <div class="bento-box chart-box">
+                <div class="box-header">
+                    <i class="fas fa-chart-pie"></i>
+                    <h3>Spending Distribution</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="expense-chart"></canvas>
+                </div>
+            </div>
 
-.landing-container {
-    text-align: center;
-    padding: 2rem;
-    max-width: 1200px;
-    width: 90%;
-}
+           
+            <div class="bento-box summary-box">
+                <div class="box-header">
+                    <i class="fas fa-calculator"></i>
+                    <h3>Quick Stats</h3>
+                </div>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <i class="fas fa-calendar"></i>
+                        <h4>This Month</h4>
+                        <span id="month-total">₹0</span>
+                    </div>
+                    <div class="summary-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>Highest Expense</h4>
+                        <span id="highest-expense">₹0</span>
+                        <small id="highest-category"></small>
+                    </div>
+                    <div class="summary-card">
+                        <i class="fas fa-tags"></i>
+                        <h4>Top Category</h4>
+                        <span id="top-category">-</span>
+                        <small id="category-percentage">0%</small>
+                    </div>
+                </div>
+            </div>
 
-.main-title {
-    font-size: 3.5rem;
-    margin-bottom: 3rem;
-    color: #ff6b2b;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    animation: fadeIn 1s ease-out;
-}
+            
+            <div class="bento-box savings-box">
+                <div class="box-header">
+                    <i class="fas fa-piggy-bank"></i>
+                    <h3>Savings Overview</h3>
+                </div>
+                <div class="savings-grid">
+                    <div class="savings-card">
+                        <h4>Remaining Budget</h4>
+                        <span id="remaining-amount">₹0</span>
+                    </div>
+                    <div class="savings-card">
+                        <h4>Savings Rate</h4>
+                        <span id="savings-rate">0%</span>
+                    </div>
+                </div>
+            </div>
 
-.cards-container {
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-    flex-wrap: wrap;
-}
+            
+            <div class="bento-box insights-box">
+                <div class="box-header">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Smart Insights</h3>
+                </div>
+                <div id="spending-trends"></div>
+                <div class="budget-warning" id="budget-warning"></div>
+            </div>
 
-.card {
-    background: rgba(26, 26, 26, 0.8);
-    backdrop-filter: blur(10px);
-    padding: 2.5rem;
-    border-radius: 1.5rem;
-    width: 300px;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(255, 107, 43, 0.1);
-    box-shadow: 0 8px 32px rgba(255, 107, 43, 0.15);
-    animation: slideUp 0.5s ease-out;
-}
+            
+            <div class="bento-box expenses-list-box">
+                <div class="box-header">
+                    <i class="fas fa-list"></i>
+                    <h3>Recent Expenses</h3>
+                </div>
+                <div id="expenses-table"></div>
+            </div>
 
-.card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(255, 107, 43, 0.25);
-    background: rgba(26, 26, 26, 0.9);
-}
+            
+            <div class="bento-box total-box">
+                <div class="box-header">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <h3>Total Expenses</h3>
+                </div>
+                <div class="total-amount">
+                    <span id="total-amount">₹0</span>
+                </div>
+                <button id="convert-currency" class="convert-btn">
+                    <i class="fas fa-exchange-alt"></i> Convert Currency
+                </button>
+            </div>
 
-.card i {
-    font-size: 3rem;
-    color: #ff6b2b;
-    margin-bottom: 1.5rem;
-    transition: transform 0.3s ease;
-}
-
-.card:hover i {
-    transform: scale(1.1);
-}
-
-.card h2 {
-    color: #fff;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
-}
-
-.card p {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
-    line-height: 1.6;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+            
+            <div class="bento-box reset-box">
+                <div class="box-header">
+                    <i class="fas fa-trash-alt"></i>
+                    <h3>Reset Data</h3>
+                </div>
+                <button id="reset-button" class="reset-btn">
+                    <i class="fas fa-exclamation-triangle"></i> Reset All Data
+                </button>
+                <small class="warning-text">This will delete all expenses and income data</small>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="reset-modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-exclamation-triangle"></i> Confirm Reset</h3>
+            <p>Are you sure you want to reset all data? This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button class="confirm-reset" id="confirm-reset">Yes, Reset All</button>
+                <button class="cancel-reset" id="cancel-reset">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <script src="expense_tracker.js"></script>
+    <script>
+    function goHome() {
+        const isGitHubPages = window.location.hostname.includes('github.io');
+        if (isGitHubPages) {
+            window.location.href = '/financial-management-suite/';
+        } else {
+            window.location.href = '../../';
+        }
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@media (max-width: 768px) {
-    .main-title {
-        font-size: 2.5rem;
-    }
-    .card {
-        width: 100%;
-        max-width: 300px;
-    }
-}
-
-@media (max-width: 480px) {
-    .main-title {
-        font-size: 2rem;
-    }
-    .landing-container {
-        padding: 1.5rem;
-    }
-    .card {
-        padding: 2rem;
-    }
-} 
+    </script>
+</body>
+</html> 
