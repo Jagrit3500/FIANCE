@@ -10,7 +10,7 @@
   <body>
     <div class="container">
       <nav class="top-nav">
-        <a href="../index.html" class="back-btn">
+        <a href="javascript:void(0)" onclick="goHome()" class="back-btn">
           <i class="fas fa-arrow-left"></i> Back to Home
         </a>
       </nav>
@@ -44,5 +44,15 @@
     </div>
     <script src="codes.js"></script>
     <script src="app.js"></script>
+    <script>
+    function goHome() {
+        const isGitHubPages = window.location.hostname.includes('github.io');
+        if (isGitHubPages) {
+            window.location.href = '/financial-management-suite/';
+        } else {
+            window.location.href = '../../';
+        }
+    }
+    </script>
   </body>
 </html>
