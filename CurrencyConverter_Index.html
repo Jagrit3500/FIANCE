@@ -10,7 +10,8 @@
   <body>
     <div class="container">
       <nav class="top-nav">
-        <a href="/index.html" onclick="goHome()" class="back-btn">
+        <!-- ✅ Fixed: href changed to "#" -->
+        <a href="#" onclick="goHome()" class="back-btn">
           <i class="fas fa-arrow-left"></i> Back to Home
         </a>
       </nav>
@@ -39,6 +40,7 @@
           </div>
         </div>
         <button type="submit">Get Exchange Rate</button>
+        <!-- ✅ Keep only one result container -->
         <div id="result-container"></div>
       </form>
     </div>
