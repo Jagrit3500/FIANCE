@@ -1,24 +1,13 @@
-
 const API_KEY = "4c835ab4180bdcd9db2695b2";
 const API_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/`;
-
 
 const fromCurrencySelect = document.getElementById("from");
 const toCurrencySelect = document.getElementById("to");
 const amountInput = document.getElementById("amount");
-const resultContainer = document.createElement("div");
-resultContainer.id = "result-container"; 
+const resultContainer = document.getElementById("result-container"); // ✅ FIXED: use existing container
 const fromFlag = document.getElementById("from-flag");
 const toFlag = document.getElementById("to-flag");
 const form = document.querySelector("form");
-
-
-const contentWrapper = document.createElement("div");
-contentWrapper.className = "content-wrapper";
-form.parentNode.insertBefore(contentWrapper, form);
-contentWrapper.appendChild(form);
-contentWrapper.appendChild(resultContainer);
-
 
 async function populateCurrencyOptions() {
     try {
@@ -39,7 +28,6 @@ async function populateCurrencyOptions() {
                 toCurrencySelect.appendChild(optionTo);
             });
 
-            
             fromCurrencySelect.value = "USD";
             toCurrencySelect.value = "INR";
             updateFlags();
@@ -48,7 +36,6 @@ async function populateCurrencyOptions() {
         showErrorMessage("Error loading currency options.");
     }
 }
-
 
 function updateFlags() {
     const fromCurrencyCode = fromCurrencySelect.value.slice(0, 2);
@@ -83,7 +70,6 @@ async function getExchangeRate(fromCurrency, toCurrency) {
     }
 }
 
-
 function showLoadingState() {
     resultContainer.innerHTML = `
         <div class="result-box">
@@ -91,7 +77,6 @@ function showLoadingState() {
         </div>
     `;
 }
-
 
 function displayResult(fromCurrency, toCurrency, exchangeRate, convertedAmount) {
     resultContainer.innerHTML = `
@@ -101,11 +86,8 @@ function displayResult(fromCurrency, toCurrency, exchangeRate, convertedAmount) 
             <p>Converted Amount: <strong>${convertedAmount} ${toCurrency}</strong></p>
         </div>
     `;
-    
-    
     resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
-
 
 function showErrorMessage(message) {
     resultContainer.innerHTML = `
@@ -115,11 +97,9 @@ function showErrorMessage(message) {
     `;
 }
 
-
 function validateAmount(amount) {
     return !isNaN(amount) && amount > 0;
 }
-
 
 form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -140,24 +120,18 @@ form.addEventListener("submit", (event) => {
     getExchangeRate(fromCurrency, toCurrency);
 });
 
-
 fromCurrencySelect.addEventListener("change", updateFlags);
 toCurrencySelect.addEventListener("change", updateFlags);
 
-
 populateCurrencyOptions();
 
-
 function initializeCurrencyConverter() {
-    
     const amountToConvert = localStorage.getItem('amountToConvert');
     if (amountToConvert) {
         document.getElementById('amount').value = amountToConvert;
-        
         localStorage.removeItem('amountToConvert');
     }
 
-    
     const urlParams = new URLSearchParams(window.location.search);
     const fromCurrency = urlParams.get('from');
     if (fromCurrency) {
@@ -166,39 +140,28 @@ function initializeCurrencyConverter() {
     }
 }
 
-
 initializeCurrencyConverter();
 
-
 function swapCurrencies() {
-    
     const fromValue = fromCurrencySelect.value;
     const toValue = toCurrencySelect.value;
-    
-   
+
     fromCurrencySelect.value = toValue;
     toCurrencySelect.value = fromValue;
-    
-   
+
     updateFlags();
-    
-    
+
     const amount = parseFloat(amountInput.value);
     if (amount > 0) {
         getExchangeRate(toValue, fromValue);
     }
 }
 
-
 document.querySelector('.fa-right-left').parentElement.addEventListener('click', function(e) {
     e.preventDefault();
-    
     this.classList.add('rotate-animation');
-    
-    
     setTimeout(() => {
         this.classList.remove('rotate-animation');
     }, 500);
-    
     swapCurrencies();
 });
