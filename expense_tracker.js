@@ -367,3 +367,9 @@ document.addEventListener('keydown', (e) => {
         modal.classList.remove('show');
     }
 }); 
+
+
+/* ✅ Back to Home function */
+function goHome() {
+    window.location.href = window.location.origin + "/FIANCE/index.html";
+}
