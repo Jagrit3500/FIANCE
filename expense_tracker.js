@@ -276,7 +276,7 @@ init();
 document.getElementById('convert-currency').addEventListener('click', function() {
     const totalAmount = expenses.reduce((sum, expense) => sum + expense.amount, 0);
     localStorage.setItem('amountToConvert', totalAmount);
-    window.location.href = '/CurrencyConverter_Index.html?from=INR';
+    window.location.href = window.location.origin + "/FIANCE/CurrencyConverter_Index.html?from=INR";
 });
 
 document.getElementById('save-income').addEventListener('click', function() {
@@ -373,3 +373,4 @@ document.addEventListener('keydown', (e) => {
 function goHome() {
     window.location.href = window.location.origin + "/FIANCE/index.html";
 }
+
