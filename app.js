@@ -168,9 +168,7 @@ document.querySelector('.fa-right-left').parentElement.addEventListener('click',
 
 /* ✅ Added Back to Home function */
 function goHome() {
-    if (window.location.hostname.includes("github.io")) {
-        window.location.href = "/FIANCE/index.html";  // for GitHub Pages
-    } else {
-        window.location.href = "index.html";  // for local testing
+    window.location.href = window.location.origin + "/FIANCE/index.html";
     }
 }
+
