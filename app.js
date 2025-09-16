@@ -165,3 +165,12 @@ document.querySelector('.fa-right-left').parentElement.addEventListener('click',
     }, 500);
     swapCurrencies();
 });
+
+/* ✅ Added Back to Home function */
+function goHome() {
+    if (window.location.hostname.includes("github.io")) {
+        window.location.href = "/FIANCE/index.html";  // for GitHub Pages
+    } else {
+        window.location.href = "index.html";  // for local testing
+    }
+}
